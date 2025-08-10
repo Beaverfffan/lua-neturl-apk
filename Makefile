@@ -10,8 +10,9 @@ PKG_RELEASE:=4
 
 PKG_SOURCE:=v1.2-1.tar.gz
 PKG_SOURCE_URL:=https://github.com/golgote/neturl/archive/refs/tags/
-PKG_SOURCE_URL_FILE:=v1.2-1.tar.gz
 PKG_HASH:=fc4ea1b114125ae821bef385936cd12429485204576e77b6283692bd0cc9b1ab
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/$(PKG_NAME)-1.2-1
 
 PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
 PKG_LICENSE:=MIT
@@ -40,6 +41,11 @@ endef
 define Package/lua-neturl/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua
 	$(CP) $(PKG_BUILD_DIR)/lib/net/url.lua $(1)/usr/lib/lua/
+endef
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(call PatchDir,$(PKG_BUILD_DIR),./patches)
 endef
 
 $(eval $(call BuildPackage,lua-neturl))
